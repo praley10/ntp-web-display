@@ -1,29 +1,72 @@
 body {
-    font-family: sans-serif;
-    background-color: #f4f4f4;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;
+    padding: 2rem;
+    min-height: 100vh;
     margin: 0;
 }
+
 .container {
-    text-align: center;
-}
-.info-box {
     background-color: #fff;
-    border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
 }
-h1, h2 {
-    color: #333;
+
+h1 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #1c1e21;
 }
-p {
+
+.source-time {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #606770;
+    font-size: 0.9em;
+}
+
+.time-zone-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.time-zone-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+}
+
+.time-zone-row.static {
+    background-color: #f6f7f9;
+}
+
+.time-zone-row label {
+    font-weight: 500;
+}
+
+.time-zone-row select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccd0d5;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 1em;
+}
+
+.time-display {
+    font-family: "SF Mono", "Fira Code", "Courier New", monospace;
     font-size: 1.1em;
-    line-height: 1.6;
-}
-strong {
-    color: #555;
+    text-align: right;
+    color: #050505;
 }
