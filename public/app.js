@@ -6,8 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
         "Australia/Sydney"
     ];
 
-    const sourceTimeElem = document.getElementById('source-time-display');
+    // Get references to all the DOM elements we'll be updating
     const timeZoneGrid = document.getElementById('time-zone-grid');
+    
+    // Server Detail Elements
+    const detailStratum = document.getElementById('detail-stratum');
+    const detailRefId = document.getElementById('detail-refid');
+    const detailRootDelay = document.getElementById('detail-rootdelay');
+    const detailPrecision = document.getElementById('detail-precision');
 
     // This will hold the master Date object from the server
     let serverBaseTime = null;
@@ -15,9 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Functions ---
 
     /**
-     * Populates the 5 dropdown selectors with time zone options.
+     * Creates the 5 dynamic rows with dropdown selectors and appends them to the grid.
      */
     function createDynamicRows() {
+        // Create static rows first in the correct order
+        const utcRow = document.createElement('div');
+        utcRow.className = 'time-zone-row static';
+        utcRow.innerHTML = `<label>UTC</label><span class="time-display" id="tz-time-utc">...</span>`;
+        timeZoneGrid.appendChild(utcRow);
+        
+        const denverRow = document.createElement('div');
+        denverRow.className = 'time-zone-row static';
+        denverRow.innerHTML = `<label>America/Denver</label><span class="time-display" id="tz-time-denver">...</span>`;
+        timeZoneGrid.appendChild(denverRow);
+
+        // Now create the 5 dynamic rows
         for (let i = 1; i <= 5; i++) {
             const row = document.createElement('div');
             row.className = 'time-zone-row';
@@ -32,14 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 select.appendChild(option);
             });
             
-            // Set a default, unique value for each dropdown
+            // Set a default, unique value for each dropdown to avoid repetition
             select.value = timeZoneList[i - 1];
             
+            // When a dropdown value changes, re-render all the times
             select.addEventListener('change', displayAllTimes);
 
             const timeDisplay = document.createElement('span');
             timeDisplay.className = 'time-display';
             timeDisplay.id = `tz-time-${i}`;
+            timeDisplay.textContent = '...';
 
             row.appendChild(select);
             row.appendChild(timeDisplay);
@@ -85,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Fetches the master time from the server.
+     * Fetches the master time and server details from the server.
      */
     function fetchMasterTime() {
         fetch('/ntp-data')
@@ -97,21 +117,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Create a new Date object from the server's ISO string
                 serverBaseTime = new Date(data.serverTime);
                 
-                // Update the main source time display once
-                sourceTimeElem.textContent = serverBaseTime.toISOString();
+                // Update the server details panel
+                detailStratum.textContent = data.stratum;
+                detailRefId.textContent = data.refId;
+                // Root Delay is in seconds, convert to milliseconds for display
+                detailRootDelay.textContent = (data.rootDelay * 1000).toFixed(4);
+                detailPrecision.textContent = data.precision;
                 
                 // Refresh all time zone displays with the new time
                 displayAllTimes();
             })
             .catch(error => {
                 console.error('Error fetching NTP data:', error);
-                sourceTimeElem.textContent = 'Error fetching data';
+                // Display an error in one of the fields to notify the user
+                detailStratum.textContent = "Error";
             });
     }
 
     // --- Initialization ---
 
-    createDynamicRows();
-    fetchMasterTime(); // Initial fetch
-    setInterval(fetchMasterTime, 5000); // Fetch new time every 5 seconds
+    createDynamicRows();      // Build the HTML structure
+    fetchMasterTime();        // Initial fetch to populate data immediately
+    setInterval(fetchMasterTime, 5000); // Set up the refresh loop
 });
