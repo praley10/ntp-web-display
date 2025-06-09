@@ -9,18 +9,16 @@
 <body>
     <div class="container">
         <h1>NTP Time Zone Viewer</h1>
-        <p class="source-time">Source Time (ntp.raleys.us): <span id="source-time-display">Loading...</span></p>
+        <p class="source-time">Source Server: ntp.raleys.us</p>
+
+        <div class="server-details">
+            <div class="detail-item"><strong>Stratum:</strong> <span id="detail-stratum">...</span></div>
+            <div class="detail-item"><strong>Ref ID:</strong> <span id="detail-refid">...</span></div>
+            <div class="detail-item"><strong>Root Delay:</strong> <span id="detail-rootdelay">...</span> ms</div>
+            <div class="detail-item"><strong>Precision:</strong> 2<sup><span id="detail-precision">...</span></sup> s</div>
+        </div>
 
         <div class="time-zone-grid" id="time-zone-grid">
-            <div class="time-zone-row static">
-                <label>UTC</label>
-                <span class="time-display" id="tz-time-utc"></span>
-            </div>
-            <div class="time-zone-row static">
-                <label>America/Denver</label>
-                <span class="time-display" id="tz-time-denver"></span>
-            </div>
-
             </div>
     </div>
     <script src="app.js"></script>
