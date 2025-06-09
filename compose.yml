@@ -1,0 +1,13 @@
+# This file defines the services that make up your application.
+services:
+  # This is the name of our single service.
+  ntp-web-display:
+    # Tell Compose to build the image from the Dockerfile in the current directory.
+    build: .
+    # Optionally give the container a specific name for easy reference.
+    container_name: my-ntp-app
+    # Forward port 3000 on the host to port 3000 in the container.
+    ports:
+      - "3000:3000"
+    # Automatically restart the container if it crashes or the system reboots.
+    restart: unless-stopped
