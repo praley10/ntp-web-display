@@ -3,18 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTP Server Information</title>
+    <title>NTP Time Zone Viewer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>NTP Server Information</h1>
-        <div class="info-box">
-            <h2>ntp.raleys.us</h2>
-            <p><strong>Server Time:</strong> <span id="server-time">Loading...</span></p>
-            <p><strong>Your Local Time:</strong> <span id="local-time">Loading...</span></p>
-            <p><strong>Time Difference:</strong> <span id="time-diff">Loading...</span></p>
-        </div>
+        <h1>NTP Time Zone Viewer</h1>
+        <p class="source-time">Source Time (ntp.raleys.us): <span id="source-time-display">Loading...</span></p>
+
+        <div class="time-zone-grid" id="time-zone-grid">
+            <div class="time-zone-row static">
+                <label>UTC</label>
+                <span class="time-display" id="tz-time-utc"></span>
+            </div>
+            <div class="time-zone-row static">
+                <label>America/Denver</label>
+                <span class="time-display" id="tz-time-denver"></span>
+            </div>
+
+            </div>
     </div>
     <script src="app.js"></script>
 </body>
