@@ -1,36 +1,38 @@
 // server.js
 
 const express = require('express');
-const NtpClient = require('node-ntp-client'); // <-- Switched to the new library
+const Sntp = require('@hapi/sntp'); // <-- Use the official @hapi/sntp package
 const path = require('path');
 
 const app = express();
 const port = 3000;
 
-// Configure the new NTP client
-const ntpClient = new NtpClient("ntp.raleys.us", 123, { timeout: 5000 });
+const ntpServer = 'ntp.raleys.us';
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/ntp-data', (req, res) => {
-    ntpClient.getNetworkTime((err, date, details) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Failed to get NTP time' });
-        }
+// Make the route handler async to use await
+app.get('/ntp-data', async (req, res) => {
+    try {
+        // The API usage is nearly identical
+        const timeDetails = await Sntp.time({ host: ntpServer, resolve: true });
 
-        // Send the full details object to the frontend
+        // Map the fields from the sntp response to our consistent API format
         res.json({
-            serverTime: date.toISOString(), // Keep this for the time displays
-            stratum: details.stratum,
-            refId: details.refId,
-            rootDelay: details.rootDelay,
-            rootDispersion: details.rootDispersion,
-            leapIndicator: details.leapIndicator,
-            poll: details.poll,
-            precision: details.precision
+            serverTime: new Date(timeDetails.t).toISOString(),
+            stratum: timeDetails.stratum,
+            refId: timeDetails.id,
+            rootDelay: timeDetails.d, // 'd' is Root Delay in seconds
+            rootDispersion: timeDetails.e, // 'e' is Root Dispersion in seconds
+            leapIndicator: timeDetails.li,
+            poll: timeDetails.poll,
+            precision: timeDetails.precision
         });
-    });
+
+    } catch (err) {
+        console.error(`Error querying NTP server: ${err.message}`);
+        return res.status(500).json({ error: 'Failed to get NTP time' });
+    }
 });
 
 app.listen(port, () => {
