@@ -51,6 +51,26 @@ h1 {
     background-color: #f6f7f9;
 }
 
+.server-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    background-color: #e7f3ff;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 2rem;
+    border: 1px solid #b3d7ff;
+}
+
+.detail-item {
+    font-size: 0.9em;
+}
+
+.detail-item strong {
+    color: #00529B;
+}
+
+
 .time-zone-row label {
     font-weight: 500;
 }
